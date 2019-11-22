@@ -218,9 +218,9 @@ public class DeviceControlActivity extends Activity {
         for (BluetoothGattService gattService : gattServices) {
             if (!gattService.getUuid().toString().equals("0000ffe0-0000-1000-8000-00805f9b34fb")) { continue; }
 
-            Log.i(TAG, gattService.getUuid().toString());
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
+            Log.i(TAG, "Service: " + uuid);
             currentServiceData.put(LIST_NAME, "LaxBit Data Collection Service");
             currentServiceData.put(LIST_UUID, uuid);
             gattServiceData.add(currentServiceData);
@@ -234,6 +234,7 @@ public class DeviceControlActivity extends Activity {
                 charas.add(gattCharacteristic);
                 HashMap<String, String> currentCharaData = new HashMap<String, String>();
                 uuid = gattCharacteristic.getUuid().toString();
+                Log.i(TAG, "Characteristic: " + uuid);
                 currentCharaData.put(LIST_NAME, SampleGattAttributes.lookup(uuid, unknownCharaString));
                 currentCharaData.put(LIST_UUID, uuid);
                 gattCharacteristicGroupData.add(currentCharaData);
@@ -252,8 +253,7 @@ public class DeviceControlActivity extends Activity {
                 android.R.layout.simple_expandable_list_item_2,
                 new String[] {LIST_NAME, LIST_UUID},
                 new int[] { android.R.id.text1, android.R.id.text2 }
-        );
-        mGattServicesList.setAdapter(gattServiceAdapter);
+        ); mGattServicesList.setAdapter(gattServiceAdapter);
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
