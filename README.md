@@ -14,6 +14,5 @@ To run the application you must build and upload the project from the AndroidStu
 This will install the application on your device and automatically launch the program. 
 
 ### Examples
-![Scanning](https://github.com/tjresearch/research-wyatt_lance_patrick/images/scanning.jpg)
-
-![Data Collection](https://github.com/tjresearch/research-wyatt_lance_patrick/images/data-collection.jpg)
+![Scanning](https://github.com/tjresearch/research-wyatt_lance_patrick/blob/master/images/scanning.jpg)
+![Data Collection](https://github.com/tjresearch/research-wyatt_lance_patrick/blob/master/images/data-collection.jpg)
