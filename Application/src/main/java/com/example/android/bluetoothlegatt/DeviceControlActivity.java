@@ -30,6 +30,8 @@ public class DeviceControlActivity extends Activity {
     private BluetoothGattCharacteristic mGattCharacteristic, mNotifyCharacteristic;
     private boolean mConnected = false;
 
+    String output = "";
+
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -52,6 +54,8 @@ public class DeviceControlActivity extends Activity {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
+                output = "";
+                mDataField.setText(output);
                 invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
@@ -65,7 +69,26 @@ public class DeviceControlActivity extends Activity {
                     }
                 }
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                mDataField.setText(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                String temp = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+
+               // String[] temp2 = temp.split("\n");
+               // String[] temps = temp2[1].split(" ");
+
+                Log.i(TAG, "temp: " + temp);
+               // int count = 0;
+               // for (String s : temps) {
+               //     if (count++ == 0) continue;
+               //     Log.i(TAG, "\t" + s + " to dec " + Integer.parseInt(s,16));
+               // }
+
+                output += temp;
+                mDataField.setText(output);
+
+
+                // sendData(temp);
+
+                // write the data to a csv file
+                    // maybe do this in a way such that we write hte data to a buffer and that buffer gets flushed to a file every so often
             }
         }
     };
@@ -86,6 +109,20 @@ public class DeviceControlActivity extends Activity {
                 mNotifyCharacteristic = characteristic;
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
             } return true;
+        } return false;
+    }
+
+    private final boolean sendData(String data) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"Whitleylance@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "LaxBit Data Collection Service");
+        i.putExtra(Intent.EXTRA_TEXT   , data);
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+            return true;
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.e(TAG,"There are no email clients installed.");
         } return false;
     }
 
